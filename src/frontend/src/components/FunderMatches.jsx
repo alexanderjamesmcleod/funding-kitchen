@@ -15,36 +15,25 @@ export default function FunderMatches({ matches, profile }) {
 
   // Parse the RAG results
   const funders = matches.results.map((result, index) => {
-    // Extract metadata from the document
-    const doc = result.document || '';
+    // Get metadata from result (search.py now passes it through)
     const metadata = result.metadata || {};
+    const doc = result.fullText || result.excerpt || '';
 
-    // Try to extract fund name from document
-    const fundNameMatch = doc.match(/^# (.+)$/m);
-    const fundName = fundNameMatch ? fundNameMatch[1] : metadata.fund_name || 'Unknown Fund';
+    // Use metadata fields directly (from ChromaDB)
+    const fundName = metadata.fund_name || result.title || 'Unknown Fund';
+    const funderName = metadata.funder_name || 'Unknown';
+    const region = metadata.region || 'Nationwide';
+    const fundingRange = metadata.funding_range || 'Check with funder';
+    const deadline = metadata.deadline || 'Ongoing';
 
-    // Extract funder name
-    const funderMatch = doc.match(/\*\*Funder:\*\* (.+)$/m);
-    const funderName = funderMatch ? funderMatch[1] : metadata.funder_name || 'Unknown';
+    // Categories come as comma-separated string from metadata
+    const categories = metadata.categories
+      ? metadata.categories.split(',').map(c => c.trim()).filter(Boolean)
+      : [];
 
-    // Extract region
-    const regionMatch = doc.match(/\*\*Region:\*\* (.+)$/m);
-    const region = regionMatch ? regionMatch[1] : metadata.region || 'Nationwide';
-
-    // Extract funding range
-    const fundingMatch = doc.match(/\*\*Funding Range:\*\* (.+)$/m);
-    const fundingRange = fundingMatch ? fundingMatch[1] : metadata.funding_range || 'Check with funder';
-
-    // Extract deadline
-    const deadlineMatch = doc.match(/\*\*Deadline:\*\* (.+)$/m);
-    const deadline = deadlineMatch ? deadlineMatch[1] : metadata.deadline || 'Ongoing';
-
-    // Extract categories
-    const categories = metadata.categories?.split(',') || [];
-
-    // Calculate match score (distance to percentage)
-    const distance = result.distance || 0;
-    const score = Math.max(0, Math.round(100 - (distance * 50)));
+    // Use relevance score from search results (0-1 scale, convert to percentage)
+    const relevance = result.relevance || 0;
+    const score = Math.round(relevance * 100);
 
     return {
       rank: index + 1,

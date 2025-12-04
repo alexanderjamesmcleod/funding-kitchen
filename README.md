@@ -13,16 +13,33 @@
 
 ## What We've Built
 
-### 1. Funder Database (RAG-powered)
-- 30+ NZ funding opportunities ingested
-- Semantic search for smart matching
-- Detailed funder requirements stored
+### 1. React Frontend (Complete!)
+A 5-step intake wizard that guides organizations through:
+- **Organization** - Name, type, region, legal details, contacts
+- **Mission & Impact** - Purpose, activities, target population, categories
+- **Financials** - Revenue, expenses, reserves, funding sources
+- **Funding Request** - Project details, amount needed, timeline
+- **Review & Match** - Profile review and funder matching
 
-**Location:** `/docs/funders/`
-- `funders.json` - Basic funder list
-- `funding-detailed-sample.json` - Rich funder profiles with requirements
+**Features:**
+- Demo mode for testing (click "Load Demo Data & Skip to Matching")
+- Click any step to jump directly
+- Real-time funder matching via AI Kitchen RAG
 
-### 2. Organization Profile Schema
+### 2. Funder Database (RAG-powered)
+- **47 unique NZ funding opportunities** ingested into ChromaDB
+- Semantic search for intelligent matching
+- Rich metadata: fund names, funder names, regions, amounts, deadlines, categories
+
+**Data Location:** `/docs/funders/funders.json`
+
+### 3. Funder Matching Engine
+Semantic matching between org profile and funder database using:
+- Sentence-transformers embeddings (all-MiniLM-L6-v2)
+- ChromaDB vector search
+- AI Kitchen RAG API integration
+
+### 4. Organization Profile Schema
 Captures everything needed to generate applications:
 
 | Section | What It Captures | Why It Matters |
@@ -35,17 +52,7 @@ Captures everything needed to generate applications:
 | Current Request | What they need, quotes | Application specifics |
 | Documents | All supporting docs | Application attachments |
 
-**Location:** `/projects/funding-kitchen/schemas/`
-- `org-profile-schema.json` - Full JSON schema
-- `sample-org-profile.json` - Example completed profile
-
-### 3. Funder Matching Engine
-Semantic matching between org profile and funder database.
-
-```bash
-# Match an org to funders
-python3 src/rag/match-funders.py "sports club Taranaki equipment funding"
-```
+**Location:** `/schemas/org-profile-schema.json`
 
 ## How It All Connects
 
@@ -54,104 +61,138 @@ python3 src/rag/match-funders.py "sports club Taranaki equipment funding"
 │                    CLIENT JOURNEY                           │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  1. INTAKE                                                  │
-│     └─> Client fills org profile (web form)                │
-│     └─> Uploads documents (constitution, accounts, etc)     │
+│  1. INTAKE (React Wizard)                                   │
+│     └─> Client fills org profile via web form              │
+│     └─> 5-step wizard guides through all sections          │
 │                                                             │
-│  2. MATCHING                                                │
-│     └─> AI searches funder database                        │
-│     └─> Returns ranked matches with eligibility scores      │
-│     └─> Client selects which funders to apply to           │
+│  2. MATCHING (AI Kitchen RAG)                               │
+│     └─> Profile sent to AI Kitchen API                     │
+│     └─> Semantic search against 47 funders                 │
+│     └─> Returns ranked matches with relevance scores       │
 │                                                             │
-│  3. APPLICATION GENERATION                                  │
+│  3. APPLICATION GENERATION (Coming Soon)                    │
 │     └─> AI parses funder's application form                │
 │     └─> Maps org profile data to form fields               │
-│     └─> Generates compelling narratives                     │
-│     └─> Produces complete draft application                 │
+│     └─> Generates compelling narratives                    │
 │                                                             │
 │  4. REVIEW & SUBMIT                                         │
 │     └─> Client reviews and approves                        │
-│     └─> Application submitted to funder                     │
-│     └─> Outcome tracked in system                          │
+│     └─> Application submitted to funder                    │
 │                                                             │
 │  5. PAYMENT (on success)                                    │
 │     └─> Admin fee charged on successful grants             │
-│     └─> Application added to patterns database              │
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## Profile → Funder Requirement Mapping
+## Running the Application
 
-Here's how our org profile schema maps to actual funder requirements:
+### Prerequisites
+- Node.js 18+
+- AI Kitchen backend running on port 8081
 
-### Pub Charity Requirements:
-| Requirement | Our Profile Field |
-|-------------|-------------------|
-| Bank deposit slip in org's name | `bank_details.account_name` |
-| Resolution to apply | Generated from `contact` |
-| At least two quotes | `current_funding_request.quotes` |
-| Proof of non-profit status | `legal.charities_number` |
-| Financial accounts | `documents.financial_accounts` |
-| Affiliation evidence | `affiliations` + `documents.affiliation_evidence` |
+### Start the Frontend
+```bash
+cd src/frontend
+npm install
+npm run dev
+```
 
-### Common Requirements Across Funders:
-| Common Need | Our Profile Field |
-|-------------|-------------------|
-| Legal name | `organization.name` |
-| Charity number | `legal.charities_number` |
-| Contact details | `contact.*` |
-| Region/location | `organization.region`, `organization.districts` |
-| What you do | `mission.purpose`, `mission.activities` |
-| Who you serve | `mission.target_population` |
-| Impact achieved | `mission.impact_statement` |
-| Financial health | `financials.*` |
-| What funding is for | `current_funding_request.*` |
-| Supporting documents | `documents.*` |
+The frontend runs on `http://localhost:3000`
+
+### Demo Mode
+Click **"Load Demo Data & Skip to Matching"** to test with sample data:
+- **Demo Org:** Taranaki Youth Rugby Trust
+- **Request:** $45,000 for equipment upgrade and clubroom improvements
+- Instantly see matching funders ranked by relevance
+
+## Architecture
+
+FundingKitchen is a **satellite project** that connects to AI Kitchen:
+
+```
+┌─────────────────────┐         ┌─────────────────────┐
+│   FundingKitchen    │  HTTP   │     AI Kitchen      │
+│   (React Frontend)  │ ──────> │   (Platform API)    │
+│   Port: 3000        │         │   Port: 8081        │
+└─────────────────────┘         └─────────────────────┘
+                                         │
+                                         ▼
+                                ┌─────────────────────┐
+                                │     ChromaDB        │
+                                │  (Vector Database)  │
+                                │  47 NZ Funders      │
+                                └─────────────────────┘
+```
+
+## Tech Stack
+
+- **Frontend:** React 18 + Vite
+- **Styling:** Custom CSS (warm orange/green theme)
+- **Backend:** AI Kitchen API (Node.js/Express)
+- **Database:** ChromaDB (vector search)
+- **Embeddings:** sentence-transformers (all-MiniLM-L6-v2)
+- **AI:** Claude (for future application generation)
+
+## Project Structure
+
+```
+projects/funding-kitchen/
+├── README.md                          # This file
+├── schemas/
+│   └── org-profile-schema.json        # Organization profile JSON schema
+├── src/
+│   ├── frontend/                      # React application
+│   │   ├── src/
+│   │   │   ├── components/
+│   │   │   │   ├── IntakeWizard.jsx   # Main wizard component
+│   │   │   │   ├── IntakeWizard.css   # Wizard styles
+│   │   │   │   ├── FunderMatches.jsx  # Matching results display
+│   │   │   │   └── steps/             # Individual step components
+│   │   │   │       ├── StepOrganization.jsx
+│   │   │   │       ├── StepMission.jsx
+│   │   │   │       ├── StepFinancials.jsx
+│   │   │   │       ├── StepFundingRequest.jsx
+│   │   │   │       └── StepReview.jsx
+│   │   │   └── services/
+│   │   │       └── ai-kitchen.js      # AI Kitchen API client
+│   │   ├── package.json
+│   │   └── vite.config.js
+│   └── backend/                       # (Future: dedicated backend)
+├── docs/
+│   └── architecture.md                # Architecture notes
+└── tests/                             # (Future: test files)
+
+# Related files in AI Kitchen:
+docs/funders/
+├── funders.json                       # 47 NZ funding opportunities
+
+src/rag/
+├── ingest-funders.py                  # Ingest funders into ChromaDB
+├── match-funders.py                   # CLI matching tool
+└── search.py                          # RAG search (returns metadata)
+```
 
 ## Next Steps
 
 ### Immediate
-- [ ] Build web intake form for org profiles
+- [x] Build web intake form for org profiles
+- [x] Funder matching with relevance scores
+- [x] Demo mode for testing
 - [ ] Add more funders to database (target: 200+)
-- [ ] Build PDF/Word application form parser
+- [ ] Application generation for selected funders
 
 ### Soon
+- [ ] Document upload handling
+- [ ] Client accounts and saved profiles
+- [ ] PDF/Word application form parser
 - [ ] Application narrative generator
-- [ ] Client portal with dashboard
-- [ ] Outcome tracking and analytics
 
 ### Later
+- [ ] Client portal with dashboard
+- [ ] Outcome tracking and analytics
 - [ ] Proactive opportunity finder agents
 - [ ] Success pattern learning
-- [ ] Multi-application batch submission
-
-## Tech Stack
-
-- **Database:** ChromaDB (vector search)
-- **Embeddings:** sentence-transformers (all-MiniLM-L6-v2)
-- **Backend:** Node.js (AI Kitchen framework)
-- **AI:** Claude for narrative generation
-- **Frontend:** React (to be built)
-
-## Files
-
-```
-projects/funding-kitchen/
-├── README.md                      # This file
-├── schemas/
-│   ├── org-profile-schema.json    # Organization profile JSON schema
-│   └── sample-org-profile.json    # Example completed profile
-└── (more to come)
-
-docs/funders/
-├── funders.json                   # Basic funder database
-└── funding-detailed-sample.json   # Rich funder profiles
-
-src/rag/
-├── ingest-funders.py             # Ingest funders into RAG
-└── match-funders.py              # Match orgs to funders
-```
 
 ---
 
