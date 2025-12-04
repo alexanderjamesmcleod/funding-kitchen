@@ -1,0 +1,318 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FundingKitchen Organization Profile",
+  "description": "Comprehensive organization profile for matching to NZ funding opportunities and generating applications",
+  "type": "object",
+  "required": ["organization", "contact", "legal", "mission"],
+  "properties": {
+
+    "organization": {
+      "type": "object",
+      "description": "Basic organization details",
+      "required": ["name", "type", "region"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Legal name of the organization",
+          "example": "Taranaki Youth Rugby Trust"
+        },
+        "trading_as": {
+          "type": "string",
+          "description": "Trading name if different from legal name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "Incorporated Society",
+            "Registered Charitable Trust",
+            "Nonprofit (unincorporated group)",
+            "Club/Team",
+            "School",
+            "Local Body",
+            "Social Enterprise",
+            "Maori Land Trust",
+            "Individual"
+          ],
+          "description": "Legal structure of organization"
+        },
+        "region": {
+          "type": "string",
+          "description": "Primary region of operation",
+          "example": "Taranaki"
+        },
+        "districts": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Specific territorial authority areas served",
+          "example": ["New Plymouth", "South Taranaki", "Stratford"]
+        },
+        "year_established": {
+          "type": "integer",
+          "description": "Year organization was founded"
+        },
+        "member_count": {
+          "type": "integer",
+          "description": "Number of members/participants"
+        },
+        "staff_count": {
+          "type": "integer",
+          "description": "Number of paid staff (0 if volunteer-only)"
+        },
+        "volunteer_count": {
+          "type": "integer",
+          "description": "Number of active volunteers"
+        }
+      }
+    },
+
+    "contact": {
+      "type": "object",
+      "description": "Primary contact for funding applications",
+      "required": ["name", "email", "phone"],
+      "properties": {
+        "name": { "type": "string" },
+        "role": { "type": "string", "example": "Secretary" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "address": {
+          "type": "object",
+          "properties": {
+            "street": { "type": "string" },
+            "suburb": { "type": "string" },
+            "city": { "type": "string" },
+            "postcode": { "type": "string" }
+          }
+        }
+      }
+    },
+
+    "legal": {
+      "type": "object",
+      "description": "Legal registration details",
+      "properties": {
+        "charities_number": {
+          "type": "string",
+          "description": "Charities Services registration number (CC12345)",
+          "pattern": "^CC[0-9]+$"
+        },
+        "incorporated_number": {
+          "type": "string",
+          "description": "Incorporated Societies number"
+        },
+        "gst_number": {
+          "type": "string",
+          "description": "GST registration number (if registered)"
+        },
+        "has_constitution": {
+          "type": "boolean",
+          "description": "Does the org have a valid constitution/rules document?"
+        },
+        "has_gaming_machines": {
+          "type": "boolean",
+          "description": "Does the org operate gaming machines? (Many funders exclude these)"
+        }
+      }
+    },
+
+    "mission": {
+      "type": "object",
+      "description": "What the organization does and who it serves",
+      "required": ["purpose", "activities", "target_population"],
+      "properties": {
+        "purpose": {
+          "type": "string",
+          "description": "One paragraph describing the organization's mission and purpose",
+          "maxLength": 1000,
+          "example": "To develop youth rugby in Taranaki by providing coaching, equipment, and competition opportunities for young players aged 5-18."
+        },
+        "activities": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Key activities the organization undertakes",
+          "example": ["Youth coaching programmes", "Weekly training sessions", "Tournament organization", "Equipment provision"]
+        },
+        "target_population": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Children (0-12)",
+              "Youth (13-24)",
+              "Adults",
+              "Elderly",
+              "Family",
+              "Maori",
+              "Pacific Peoples",
+              "Migrants/Refugees",
+              "Disabled",
+              "LGBTQI+",
+              "Women",
+              "Rural communities",
+              "Low income",
+              "General community"
+            ]
+          },
+          "description": "Who the organization primarily serves"
+        },
+        "categories": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Funding categories that match the org's work",
+          "example": ["sport", "youth", "community", "health"]
+        },
+        "impact_statement": {
+          "type": "string",
+          "description": "Brief statement of community impact achieved",
+          "example": "Last year we provided rugby opportunities to 450 young people, with 60% from low-income families receiving subsidized fees."
+        }
+      }
+    },
+
+    "affiliations": {
+      "type": "array",
+      "description": "Regional or national body affiliations (many funders require this)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "body_name": { "type": "string", "example": "Taranaki Rugby Football Union" },
+          "membership_type": { "type": "string", "example": "Full Member" },
+          "since": { "type": "integer", "example": 2015 }
+        }
+      }
+    },
+
+    "financials": {
+      "type": "object",
+      "description": "Financial information (required by most funders)",
+      "properties": {
+        "annual_revenue": {
+          "type": "number",
+          "description": "Total annual revenue/income"
+        },
+        "annual_expenses": {
+          "type": "number",
+          "description": "Total annual expenses"
+        },
+        "reserves": {
+          "type": "number",
+          "description": "Cash reserves / savings"
+        },
+        "financial_year_end": {
+          "type": "string",
+          "description": "Month financial year ends",
+          "example": "March"
+        },
+        "has_audited_accounts": {
+          "type": "boolean",
+          "description": "Are accounts audited or reviewed?"
+        },
+        "other_funding_sources": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Other sources of funding",
+          "example": ["Member subscriptions", "Fundraising events", "Council grants"]
+        }
+      }
+    },
+
+    "bank_details": {
+      "type": "object",
+      "description": "Bank account details (required for payments)",
+      "properties": {
+        "bank_name": { "type": "string" },
+        "account_name": { "type": "string", "description": "Must match organization's legal name" },
+        "account_number": { "type": "string" }
+      }
+    },
+
+    "current_funding_request": {
+      "type": "object",
+      "description": "What the organization is currently seeking funding for",
+      "properties": {
+        "project_name": {
+          "type": "string",
+          "description": "Name/title of project or funding request"
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of what funding is needed for",
+          "maxLength": 2000
+        },
+        "amount_requested": {
+          "type": "number",
+          "description": "Total amount being sought"
+        },
+        "purpose_categories": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Equipment/Assets",
+              "Building/Facilities",
+              "Programme delivery",
+              "Salaries/Staffing",
+              "Training/Development",
+              "Events",
+              "Marketing/Promotion",
+              "Research",
+              "Feasibility study",
+              "Operational costs",
+              "Vehicle"
+            ]
+          }
+        },
+        "timeline": {
+          "type": "string",
+          "description": "When the project will be delivered",
+          "example": "January - December 2025"
+        },
+        "has_quotes": {
+          "type": "boolean",
+          "description": "Have quotes been obtained for items?"
+        },
+        "quotes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "item": { "type": "string" },
+              "supplier": { "type": "string" },
+              "amount": { "type": "number" }
+            }
+          }
+        },
+        "other_funding_secured": {
+          "type": "number",
+          "description": "Amount already secured from other sources for this project"
+        },
+        "own_contribution": {
+          "type": "number",
+          "description": "Amount the organization is contributing"
+        }
+      }
+    },
+
+    "documents": {
+      "type": "object",
+      "description": "Documents available for applications",
+      "properties": {
+        "constitution": { "type": "string", "description": "File path or URL" },
+        "financial_accounts": { "type": "string" },
+        "bank_statement": { "type": "string" },
+        "quotes": { "type": "array", "items": { "type": "string" } },
+        "support_letters": { "type": "array", "items": { "type": "string" } },
+        "affiliation_evidence": { "type": "array", "items": { "type": "string" } },
+        "photos": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" },
+        "profile_completeness": { "type": "integer", "minimum": 0, "maximum": 100 }
+      }
+    }
+  }
+}

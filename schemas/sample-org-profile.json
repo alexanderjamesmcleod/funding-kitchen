@@ -1,0 +1,131 @@
+{
+  "organization": {
+    "name": "Taranaki Youth Rugby Trust",
+    "trading_as": "Taranaki Junior Rugby",
+    "type": "Registered Charitable Trust",
+    "region": "Taranaki",
+    "districts": ["New Plymouth", "South Taranaki", "Stratford"],
+    "year_established": 2012,
+    "member_count": 450,
+    "staff_count": 1,
+    "volunteer_count": 45
+  },
+
+  "contact": {
+    "name": "Sarah Mitchell",
+    "role": "Trust Secretary",
+    "email": "sarah@taranakijuniorrugby.org.nz",
+    "phone": "027 555 1234",
+    "address": {
+      "street": "123 Rugby Lane",
+      "suburb": "Fitzroy",
+      "city": "New Plymouth",
+      "postcode": "4312"
+    }
+  },
+
+  "legal": {
+    "charities_number": "CC54321",
+    "incorporated_number": null,
+    "gst_number": "123-456-789",
+    "has_constitution": true,
+    "has_gaming_machines": false
+  },
+
+  "mission": {
+    "purpose": "To develop youth rugby in Taranaki by providing coaching, equipment, and competition opportunities for young players aged 5-18, with a focus on making rugby accessible to all families regardless of financial circumstances.",
+    "activities": [
+      "Weekly coaching sessions for 8 age-grade teams",
+      "Annual equipment lending scheme",
+      "Holiday rugby camps",
+      "Inter-club tournament organization",
+      "Referee and coach development programmes",
+      "Hardship fund for registration fees"
+    ],
+    "target_population": ["Children (0-12)", "Youth (13-24)", "Low income", "Rural communities"],
+    "categories": ["sport", "youth", "community", "health", "recreation"],
+    "impact_statement": "In 2024 we provided rugby opportunities to 450 young people across Taranaki. 35% received subsidized fees through our hardship fund, and 12 of our junior players were selected for Taranaki representative teams."
+  },
+
+  "affiliations": [
+    {
+      "body_name": "Taranaki Rugby Football Union",
+      "membership_type": "Affiliated Club",
+      "since": 2012
+    },
+    {
+      "body_name": "New Zealand Rugby",
+      "membership_type": "Via TRFU",
+      "since": 2012
+    }
+  ],
+
+  "financials": {
+    "annual_revenue": 85000,
+    "annual_expenses": 78000,
+    "reserves": 22000,
+    "financial_year_end": "December",
+    "has_audited_accounts": true,
+    "other_funding_sources": [
+      "Player registrations ($35,000)",
+      "Fundraising events ($15,000)",
+      "Pub Charity grant ($12,000)",
+      "Merchandise sales ($8,000)"
+    ]
+  },
+
+  "bank_details": {
+    "bank_name": "ANZ",
+    "account_name": "Taranaki Youth Rugby Trust",
+    "account_number": "06-0123-0456789-00"
+  },
+
+  "current_funding_request": {
+    "project_name": "Equipment Upgrade and Clubroom Improvements",
+    "description": "We are seeking funding for two key projects: (1) Replacement of aging training equipment including tackle bags, hit shields, and training balls that are now 8+ years old and becoming unsafe. (2) Upgrade of our clubroom facilities to improve accessibility, including a wheelchair ramp, accessible toilet, and improved lighting for evening use. These improvements will allow us to expand our programme to include para-rugby and evening sessions for working families.",
+    "amount_requested": 45000,
+    "purpose_categories": ["Equipment/Assets", "Building/Facilities"],
+    "timeline": "March - October 2025",
+    "has_quotes": true,
+    "quotes": [
+      { "item": "Training equipment package", "supplier": "Rugby Imports NZ", "amount": 12500 },
+      { "item": "Training equipment package", "supplier": "Steeden Sports", "amount": 14200 },
+      { "item": "Accessibility ramp + handrails", "supplier": "Access Builders Taranaki", "amount": 18500 },
+      { "item": "Accessibility ramp + handrails", "supplier": "BuildRight Ltd", "amount": 21000 },
+      { "item": "Accessible toilet retrofit", "supplier": "Plumb Perfect", "amount": 8500 },
+      { "item": "LED floodlight upgrade", "supplier": "Electrical Solutions NP", "amount": 6800 }
+    ],
+    "other_funding_secured": 8000,
+    "own_contribution": 7000
+  },
+
+  "documents": {
+    "constitution": "/uploads/taranaki-youth-rugby/constitution-2023.pdf",
+    "financial_accounts": "/uploads/taranaki-youth-rugby/annual-accounts-2024.pdf",
+    "bank_statement": "/uploads/taranaki-youth-rugby/bank-statement-nov2024.pdf",
+    "quotes": [
+      "/uploads/taranaki-youth-rugby/quote-rugby-imports.pdf",
+      "/uploads/taranaki-youth-rugby/quote-steeden.pdf",
+      "/uploads/taranaki-youth-rugby/quote-access-builders.pdf",
+      "/uploads/taranaki-youth-rugby/quote-plumb-perfect.pdf"
+    ],
+    "support_letters": [
+      "/uploads/taranaki-youth-rugby/letter-trfu-support.pdf",
+      "/uploads/taranaki-youth-rugby/letter-disability-nz.pdf"
+    ],
+    "affiliation_evidence": [
+      "/uploads/taranaki-youth-rugby/trfu-affiliation-cert.pdf"
+    ],
+    "photos": [
+      "/uploads/taranaki-youth-rugby/current-clubrooms.jpg",
+      "/uploads/taranaki-youth-rugby/training-session.jpg",
+      "/uploads/taranaki-youth-rugby/old-equipment.jpg"
+    ]
+  },
+
+  "metadata": {
+    "created_at": "2024-12-04T10:30:00Z",
+    "updated_at": "2024-12-04T10:30:00Z",
+    "profile_completeness": 95
+  }
+}
